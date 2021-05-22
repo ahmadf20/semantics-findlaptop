@@ -1,5 +1,6 @@
 import 'package:findlaptop/pages/about_us_page.dart';
 import 'package:findlaptop/services/services.dart';
+import 'package:findlaptop/utils/asset_manager.dart';
 import 'package:findlaptop/utils/custom_bot_toast.dart';
 import 'package:findlaptop/utils/loading_indicator.dart';
 import 'package:findlaptop/utils/utils.dart';
@@ -28,14 +29,11 @@ class _HomePageState extends State<HomePage> {
   String? selectedScreenSize = 'None';
   String? selectedRAM = 'None';
 
-  int minPrice = 0;
-
-  /// above 25.000.000
-  int maxPrice = 100000000;
-
   List<Laptop> laptops = [];
 
   TextEditingController searchController = TextEditingController();
+  TextEditingController minPriceTC = TextEditingController();
+  TextEditingController maxPriceTC = TextEditingController();
 
   void fetchProduct() async {
     isLoading = true;
@@ -47,6 +45,8 @@ class _HomePageState extends State<HomePage> {
         type: selectedType == 'None' ? null : selectedType,
         inches: selectedScreenSize == 'None' ? null : selectedScreenSize,
         ram: selectedRAM == 'None' ? null : selectedRAM,
+        low: double.tryParse(minPriceTC.text),
+        high: double.tryParse(maxPriceTC.text),
       ).then((res) {
         if (res is List<Laptop>) {
           laptops = res;
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                       fetchProduct();
                     },
                     decoration: InputDecoration(
-                      hintText: 'Search product name...',
+                      hintText: 'Cari nama produk...',
                       hintStyle: TextStyle(color: Colors.grey),
                       fillColor: Colors.white,
                       filled: true,
@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  constraints: BoxConstraints(maxWidth: 500),
+                  constraints: BoxConstraints(maxWidth: 800),
                 ),
                 SizedBox(height: 25),
               ],
@@ -264,6 +264,8 @@ class _HomePageState extends State<HomePage> {
                       selectedType = 'None';
                       selectedScreenSize = 'None';
                       selectedRAM = 'None';
+                      minPriceTC.clear();
+                      maxPriceTC.clear();
                       fetchProduct();
                     }
                     isFilterShown = !isFilterShown;
@@ -273,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                 if (isFilterShown) ...[
                   SizedBox(height: 35),
                   Container(
-                    constraints: BoxConstraints(maxWidth: 500),
+                    constraints: BoxConstraints(maxWidth: 800),
                     padding: EdgeInsets.symmetric(horizontal: 25),
                     child: Wrap(
                       spacing: 10,
@@ -431,10 +433,87 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Min Price',
+                            style: TextStyle(
+                              color: Colors.blue[800],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: 150,
+                            child: TextField(
+                              controller: minPriceTC,
+                              decoration: InputDecoration(
+                                hintText: '0',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                fillColor: Colors.white,
+                                filled: true,
+                                contentPadding: EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: Colors.blue[200]!,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 15),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Max Price',
+                            style: TextStyle(
+                              color: Colors.blue[800],
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: 150,
+                            child: TextField(
+                              controller: maxPriceTC,
+                              decoration: InputDecoration(
+                                hintText: '1.000.000.000',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                fillColor: Colors.white,
+                                filled: true,
+                                contentPadding: EdgeInsets.all(15),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: Colors.blue[200]!,
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
                   SizedBox(height: 20),
                   TextButton(
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.all(22.5),
                       backgroundColor: Colors.blue,
                       shadowColor: Colors.red,
                     ),
@@ -469,18 +548,23 @@ class _HomePageState extends State<HomePage> {
               ? Center(
                   child: loadingIndicator(),
                 )
-              : Padding(
-                  padding: const EdgeInsets.only(left: 25),
-                  child: Text(
-                    'Menampilkan ${laptops.length} data laptop',
-                    style: TextStyle(
-                      color: Colors.grey,
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      constraints: BoxConstraints(maxWidth: 800),
+                      padding: const EdgeInsets.only(left: 25),
+                      child: Text(
+                        'Menampilkan ${laptops.length} data laptop',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
           if (!isLoading)
             Container(
-              constraints: BoxConstraints(maxWidth: 500),
               child: ListView.builder(
                 padding: EdgeInsets.all(25),
                 shrinkWrap: true,
@@ -488,71 +572,97 @@ class _HomePageState extends State<HomePage> {
                 itemCount: laptops.length,
                 itemBuilder: (context, index) {
                   Laptop item = laptops[index];
-                  return Container(
-                    padding: EdgeInsets.all(25),
-                    margin: EdgeInsets.only(bottom: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.only(top: 5),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Image.network(
-                                'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-google-icon-logo-png-transparent-svg-vector-bie-supply-14.png',
-                                width: 25,
-                                height: 25,
-                              ),
-                            ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: 800,
+                            minWidth: 100,
+                          ),
+                          padding: EdgeInsets.all(25),
+                          margin: EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    item.product!,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.only(top: 5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Image.asset(
+                                      AssetManager.getBrandIcon(item.company!),
+                                      width: 25,
+                                      height: 25,
                                     ),
                                   ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    '${item.ram!} • ${item.cpu!} • ${item.gpu!} • ${item.inches!}" • ${item.memory!}',
-                                    style: TextStyle(
-                                      color: Colors.grey,
+                                  SizedBox(width: 15),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                item.product!,
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              item.typeName!,
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 14,
+                                                color: Colors.grey[400],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          '${item.ram!} • ${item.cpu!} • ${item.gpu!} • ${item.inches!}" • ${item.memory!} • ${item.opSys!} • ${item.screenResolution!} • ${item.weight!}',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(children: [
-                          Spacer(),
-                          Text(
-                            'Rp ${formatNumber(item.price!)}',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                              SizedBox(height: 10),
+                              Row(children: [
+                                Spacer(),
+                                Text(
+                                  'Rp ${formatNumber(item.price!)}',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ]),
+                            ],
                           ),
-                        ]),
-                      ],
-                    ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),

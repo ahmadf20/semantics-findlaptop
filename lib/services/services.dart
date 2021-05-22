@@ -29,22 +29,22 @@ class NetworkServices {
     String? company,
     String? ram,
     String? opsys,
-    int low = 0,
-    int high = 100000000000000000,
+    double? low,
+    double? high,
     String? inches,
     int? limit,
   }) async {
     Map<String, dynamic>? queryParameter = {
       'product': product,
-      'low': low,
-      'high': high,
+      'low': low ?? 0,
+      'high': high ?? 100000000000000000,
       'inches': inches == null ? null : double.parse(inches),
       'type': type,
       'cpu': cpu,
       'company': company,
       'ram': ram,
       'operating_system': opsys,
-      'limit': limit ?? 25,
+      'limit': limit ?? 100,
     };
 
     logger.v(queryParameter);

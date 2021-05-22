@@ -32,12 +32,6 @@ class AboutUsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                LottieBuilder.network(
-                  'https://assets2.lottiefiles.com/packages/lf20_rycdh53q.json',
-                  reverse: true,
-                  width: 500,
-                ),
-                SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
