@@ -50,7 +50,7 @@ class NetworkServices {
     logger.v(queryParameter);
 
     try {
-      Response res = await dio.post(
+      Response res = await dio.get(
         '/product',
         queryParameters: queryParameter,
         options: Options(headers: header),
