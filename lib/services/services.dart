@@ -5,7 +5,7 @@ import 'package:findlaptop/models/models.dart';
 import 'package:findlaptop/utils/utils.dart';
 
 class NetworkServices {
-  static final String url = 'https://findlaptop-backend-service.herokuapp.com';
+  static final String url = 'http://localhost:3001';
 
   static BaseOptions options = BaseOptions(
     baseUrl: '$url/api',
@@ -21,6 +21,45 @@ class NetworkServices {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
+
+  static Future getByQuery({
+    String? query,
+  }) async {
+    Map<String, dynamic>? data = {
+      'input': query,
+    };
+
+    logger.v(data);
+
+    try {
+      Response res = await dio.post(
+        '/all',
+        data: data,
+        options: Options(headers: header),
+      );
+
+      logger.v(json.decode(res.toString()));
+
+      if (res.data['status'] >= 200 &&
+          res.data['status'] < 300 &&
+          res.data['success'] == true) {
+        return (res.data['data'] as List)
+            .map((val) => Laptop.fromJson(val))
+            .toList();
+      }
+      return res.data['message'];
+    } on DioError catch (e) {
+      logger.e(e);
+      if (e.response != null) {
+        return e.response?.data['message'];
+      } else {
+        return 'Kesalahan Jaringan';
+      }
+    } catch (e) {
+      logger.e(e);
+      return 'Kesalahan Jaringan';
+    }
+  }
 
   static Future getByProducts({
     String? product,
@@ -50,7 +89,7 @@ class NetworkServices {
     logger.v(queryParameter);
 
     try {
-      Response res = await dio.post(
+      Response res = await dio.get(
         '/product',
         queryParameters: queryParameter,
         options: Options(headers: header),

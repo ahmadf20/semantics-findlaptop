@@ -38,28 +38,49 @@ class _HomePageState extends State<HomePage> {
   void fetchProduct() async {
     isLoading = true;
     setState(() {});
-    try {
-      await NetworkServices.getByProducts(
-        product: searchController.text,
-        company: selectedBrand == 'None' ? null : selectedBrand,
-        type: selectedType == 'None' ? null : selectedType,
-        inches: selectedScreenSize == 'None' ? null : selectedScreenSize,
-        ram: selectedRAM == 'None' ? null : selectedRAM,
-        low: double.tryParse(minPriceTC.text),
-        high: double.tryParse(maxPriceTC.text),
-      ).then((res) {
-        if (res is List<Laptop>) {
-          laptops = res;
-          setState(() {});
-        } else {
-          customBotToastText(res);
-        }
-      });
-    } catch (e) {
-      customBotToastText(ErrorMessage.general);
-    } finally {
-      isLoading = false;
-      setState(() {});
+
+    if (isFilterShown) {
+      try {
+        await NetworkServices.getByProducts(
+          product: searchController.text,
+          company: selectedBrand == 'None' ? null : selectedBrand,
+          type: selectedType == 'None' ? null : selectedType,
+          inches: selectedScreenSize == 'None' ? null : selectedScreenSize,
+          ram: selectedRAM == 'None' ? null : selectedRAM,
+          low: double.tryParse(minPriceTC.text),
+          high: double.tryParse(maxPriceTC.text),
+        ).then((res) {
+          if (res is List<Laptop>) {
+            laptops = res;
+            setState(() {});
+          } else {
+            customBotToastText(res);
+          }
+        });
+      } catch (e) {
+        customBotToastText(ErrorMessage.general);
+      } finally {
+        isLoading = false;
+        setState(() {});
+      }
+    } else {
+      try {
+        await NetworkServices.getByQuery(
+          query: searchController.text,
+        ).then((res) {
+          if (res is List<Laptop>) {
+            laptops = res;
+            setState(() {});
+          } else {
+            customBotToastText(res);
+          }
+        });
+      } catch (e) {
+        customBotToastText(ErrorMessage.general);
+      } finally {
+        isLoading = false;
+        setState(() {});
+      }
     }
   }
 
