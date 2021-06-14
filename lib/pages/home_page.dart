@@ -597,89 +597,92 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Container(
-                          constraints: BoxConstraints(
-                            maxWidth: 800,
-                            minWidth: 100,
-                          ),
-                          padding: EdgeInsets.all(25),
-                          margin: EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(10),
-                                    margin: EdgeInsets.only(top: 5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(5),
+                        child: Center(
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: 800,
+                              minWidth: 100,
+                            ),
+                            padding: EdgeInsets.all(25),
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      margin: EdgeInsets.only(top: 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Image.asset(
+                                        AssetManager.getBrandIcon(
+                                            item.company!),
+                                        width: 25,
+                                        height: 25,
+                                      ),
                                     ),
-                                    child: Image.asset(
-                                      AssetManager.getBrandIcon(item.company!),
-                                      width: 25,
-                                      height: 25,
-                                    ),
-                                  ),
-                                  SizedBox(width: 15),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                item.product!,
-                                                style: TextStyle(
-                                                  fontFamily: 'Poppins',
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
+                                    SizedBox(width: 15),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  item.product!,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Text(
-                                              item.typeName!,
-                                              style: TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize: 14,
-                                                color: Colors.grey[400],
+                                              Text(
+                                                item.typeName!,
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 14,
+                                                  color: Colors.grey[400],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          '${item.ram!} • ${item.cpu!} • ${item.gpu!} • ${item.inches!}" • ${item.memory!} • ${item.opSys!} • ${item.screenResolution!} • ${item.weight!}',
-                                          style: TextStyle(
-                                            color: Colors.grey,
+                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(height: 5),
+                                          Text(
+                                            '${item.ram!} • ${item.cpu!} • ${item.gpu!} • ${item.inches!}" • ${item.memory!} • ${item.opSys!} • ${item.screenResolution!} • ${item.weight!}',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(children: [
+                                  Spacer(),
+                                  Text(
+                                    'Rp ${formatNumber(item.price!)}',
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Row(children: [
-                                Spacer(),
-                                Text(
-                                  'Rp ${formatNumber(item.price!)}',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ]),
-                            ],
+                                ]),
+                              ],
+                            ),
                           ),
                         ),
                       ),
